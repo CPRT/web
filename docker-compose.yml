@@ -26,6 +26,7 @@ services:
     volumes:
       - './cprt-ros-web:/app'
       - /app/node_modules
+    stdin_open: true
     environment:
       - HOST=0.0.0.0
     ports:
