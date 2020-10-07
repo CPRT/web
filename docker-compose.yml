@@ -19,3 +19,11 @@ services:
       dockerfile: Dockerfile.ros_bridge
     ports:
       - 9090:9090
+
+  frontend:
+    build:
+      context: cprt-ros-web
+    environment:
+      - HOST=0.0.0.0
+    ports:
+      - 3000:3000
