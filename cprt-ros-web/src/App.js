@@ -7,7 +7,7 @@ class App extends React.Component {
   state = {
     connected: false,
     error: undefined,
-    url: "ws://web_bridge:9090",
+    url: "ws://192.168.2.2:9090",
   }
 
   ros = null;
