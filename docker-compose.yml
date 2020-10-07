@@ -23,6 +23,9 @@ services:
   frontend:
     build:
       context: cprt-ros-web
+    volumes:
+      - './cprt-ros-web:/app'
+      - /app/node_modules
     environment:
       - HOST=0.0.0.0
     ports:
