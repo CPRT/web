@@ -23,4 +23,4 @@ Finally all that is needed is to launch rosbridge;
 roslaunch rosbridge_server rosbridge_websocket.launch
 ```
 
->> Note: `<rosdistro>` is the ROS installation distribution that you are currently using, for example `noetic`
+> Note: `<rosdistro>` is the ROS installation distribution that you are currently using, for example `noetic`
