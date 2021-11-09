@@ -1,6 +1,7 @@
 import React from 'react';
 import ROSLIB from 'roslib';
 import StreamViewer from './components/StreamViewer';
+import CustomGamepad from './components/Gamepad';
 import './App.css';
 import { TextField, Button, Grid, Paper, Box }  from '@mui/material';
 import { Switch, BrowserRouter as Router, Route, Link } from 'react-router-dom'
@@ -71,6 +72,7 @@ class App extends React.Component {
             <div>
               <StreamViewer host={this.state.address} port={8081} topic="/camera/image_raw" quality={80}/>
               <StreamViewer host={this.state.address} port={8081} topic="/zed2/depth/depth_registered" quality={80}/>
+              <CustomGamepad/>
             </div>
             </Route>
           </Switch>
