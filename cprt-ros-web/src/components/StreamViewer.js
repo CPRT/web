@@ -9,6 +9,7 @@ class StreamViewer extends React.Component {
   }
 
   componentDidMount() {
+    // eslint-disable-next-line no-unused-vars
     var viewer = new MJPEGCANVAS.Viewer({
       divID : this.id,
       host : this.props.host,
