@@ -8,9 +8,11 @@ class RequireROS extends Component {
 
   render() {
     console.log(this.context.ros)
-    if(!this.context.ros.ROS.isConnected){
+    if(!this.context.ros.isConnected){
       return <Navigate to="/connect"/>;
     }
+
+    // TODO: Check for errors/disconnections and create modal/popup of alerts
 
     return this.props.children;
   }

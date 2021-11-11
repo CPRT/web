@@ -1,31 +1,76 @@
 import React, { Component } from 'react';
 import ROSLIB from 'roslib';
-import ROSContext, {IROS} from '../contexts/ROSContext';
+import ROSContext from '../contexts/ROSContext';
+import { toast } from 'react-toastify';
 
-interface IProps {
-}
+
+interface IProps {}
 
 interface IState {
-  ros: IROS
+  ros: ROSLIB.Ros;
+  url: string;
+  connecting: boolean
 }
+
 
 class ROSProvider extends Component<IProps, IState> {
   constructor(props: IProps) {
     super(props)
 
     this.state = {
-      ros: {
-        ROS: new ROSLIB.Ros({}),
-        url: "ws://localhost:9090",
-        isConnected: false,
-        ROSConfirmedConnected: false,
-        autoconnect: false,
-      }
+      ros: new ROSLIB.Ros({}),
+      url: "localhost",
+      connecting: false,
+    }
+
+    this.state.ros.on('connection', () => {
+      console.log('Connection Successful!')
+      this.setState({connecting: false})
+      toast.success('Connection Successful!', {
+        position: "top-right",
+        autoClose: 5000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        });
+    });
+
+    this.state.ros.on('error', (error) => {
+      console.log(error)
+      this.setState({connecting: false})
+      toast.error('Connection Failed.', {
+        position: "top-right",
+        autoClose: 5000,
+        closeOnClick: true,
+        pauseOnHover: true,
+      });
+      this.state.ros.close();
+    });
+  }
+
+  setUrl(url: string) {
+    this.setState({url: url});
+  }
+
+  connect() {
+    console.log("Attemping Connection");
+    this.setState({connecting: true})
+    try {
+      this.state.ros.connect(`ws://${this.state.url}:9090`);
+      console.log(this.state.ros)
+    } catch (e) {
+      console.log("Failed to create ros instance", e)
     }
   }
+
   render() {
     return (
-      <ROSContext.Provider value={{ros: this.state.ros}}>
+      <ROSContext.Provider value={
+          {
+            connect: this.connect.bind(this),
+            setUrl: this.setUrl.bind(this),
+            ...this.state
+          }
+        }>
         {this.props.children}
       </ROSContext.Provider>
     )

@@ -1,22 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import RosConnect from './components/RosConnect';
+import Dashboard from './components/Dashboard';
+import Connect from './components/Connect';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ROSProvider from './components/ROSProvider';
 import RequireROS from './components/RequireROS';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <ROSProvider>
+      <ToastContainer />
         <Routes>
-          <Route path="/connect" element={<RosConnect/>}/>
+          <Route path="/connect" element={<Connect/>}/>
           <Route path="/" element={
             <RequireROS>
-              <App/>
+              <Dashboard/>
             </RequireROS>}
           />  
         </Routes>

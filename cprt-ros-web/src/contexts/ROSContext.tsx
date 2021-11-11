@@ -1,17 +1,14 @@
 import React from 'react';
+import ROSLIB from 'roslib';
 
 export interface IROS {
-  ROS: any;
+  ros: ROSLIB.Ros;
   url: string;
-  isConnected: boolean;
-  ROSConfirmedConnected: boolean;
-  autoconnect: boolean;
+  connecting: boolean;
+  connect: () => void;
+  setUrl: (url: string) => void;
 }
 
-interface IROSContext {
-  ros: IROS
-}
-
-const ROSContext = React.createContext<IROSContext>({} as IROSContext);
+const ROSContext = React.createContext<IROS>({} as IROS);
 
 export default ROSContext;

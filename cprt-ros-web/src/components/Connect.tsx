@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
-import { TextField, Button, Grid, Paper, Box}  from '@mui/material';
+import { TextField, Grid, Paper, Box}  from '@mui/material';
+import ROSContext from '../contexts/ROSContext';
+import ConnectButton from './ConnectButton';
 
 interface IProps {
 }
 interface IState {
   address: string;
-  connected: boolean;
 }
 
-class RosConnect extends Component<IProps, IState> {
+class Connect extends Component<IProps, IState> {
+  static contextType = ROSContext;
   constructor(props: IProps) {
     super(props)
 
     this.state = {
       address: "localhost",
-      connected: false
     }
   }
 
@@ -26,8 +27,8 @@ class RosConnect extends Component<IProps, IState> {
   handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (this.state.address){
-      // do connection here
-      this.setState({connected: true})
+      this.context.setUrl(this.state.address);
+      this.context.connect();
     }
   }
 
@@ -43,7 +44,7 @@ class RosConnect extends Component<IProps, IState> {
                   <TextField required fullWidth id="address" onChange={this.handleChange} value={this.state.address} label="Rover IP"/>
                 </Grid>
                 <Grid item xs={3}>
-                  <Button fullWidth type="submit" variant="contained" href="ROS">Connect</Button>
+                  <ConnectButton connecting={this.context.connecting}/>
                 </Grid>
                 </Grid>
               </form>
@@ -55,4 +56,4 @@ class RosConnect extends Component<IProps, IState> {
   }
 }
 
-export default RosConnect
+export default Connect
