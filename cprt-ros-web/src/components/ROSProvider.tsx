@@ -47,16 +47,12 @@ class ROSProvider extends Component<IProps, IState> {
     });
   }
 
-  setUrl(url: string) {
-    this.setState({url: url});
-  }
-
-  connect() {
+  connect(url: string) {
+    this.setState({url: url})
     console.log("Attemping Connection");
     this.setState({connecting: true})
     try {
-      this.state.ros.connect(`ws://${this.state.url}:9090`);
-      console.log(this.state.ros)
+      this.state.ros.connect(`ws://${url}:9090`);
     } catch (e) {
       console.log("Failed to create ros instance", e)
     }
@@ -67,7 +63,6 @@ class ROSProvider extends Component<IProps, IState> {
       <ROSContext.Provider value={
           {
             connect: this.connect.bind(this),
-            setUrl: this.setUrl.bind(this),
             ...this.state
           }
         }>
