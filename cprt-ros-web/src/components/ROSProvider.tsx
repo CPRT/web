@@ -1,88 +1,66 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import ROSLIB from 'roslib';
 import ROSContext from '../contexts/ROSContext';
 import { toast } from 'react-toastify';
 
-
-interface IProps {}
-
-interface IState {
-  ros: ROSLIB.Ros;
-  url: string;
-  connecting: boolean
-  isConnected: boolean;
+interface ROSProps {
+  children?: React.ReactChildren;
 }
 
+export default function ROSProvider(props: ROSProps) {
+  let [ros, setROS] = useState<ROSLIB.Ros>(new ROSLIB.Ros({}));
+  let [url, setUrl] = useState<string>("localhost");
+  let [connecting, setConnecting] = useState<boolean>(false);
+  let [isConnected, setIsConnected] = useState<boolean>(false);
 
-class ROSProvider extends Component<IProps, IState> {
-  constructor(props: IProps) {
-    super(props)
-
-    this.state = {
-      ros: new ROSLIB.Ros({}),
-      url: "localhost",
-      connecting: false,
-      isConnected: false,
-    }
-
-    this.state.ros.on('connection', () => {
-      console.log('Connection Successful!')
-      this.setState({
-        connecting: false,
-        isConnected: true
-      })
-      toast.success('Connection Successful!', {
-        position: "top-right",
-        autoClose: 5000,
-        closeOnClick: true,
-        pauseOnHover: true,
-        pauseOnFocusLoss: false,
-      });
+  ros.on('connection', () => {
+    console.log('Connection Successful!')
+    setConnecting(false);
+    setIsConnected(true);
+    toast.success('Connection Successful!', {
+      position: "top-right",
+      autoClose: 5000,
+      closeOnClick: true,
+      pauseOnHover: true,
+      pauseOnFocusLoss: false,
     });
+  });
 
-    this.state.ros.on('error', (error) => {
-      console.log(error)
-      localStorage.removeItem("rosServerAddress");
-      this.setState({
-        connecting: false,
-        isConnected: false 
-      })
-      toast.error('Connection Failed.', {
-        position: "top-right",
-        autoClose: 5000,
-        closeOnClick: true,
-        pauseOnFocusLoss: false,
-        pauseOnHover: true,
-      });
+  ros.on('error', (error) => {
+    console.log(error)
+    localStorage.removeItem("rosServerAddress");
+    setConnecting(false);
+    setIsConnected(false);
+    toast.error('Connection Failed.', {
+      position: "top-right",
+      autoClose: 5000,
+      closeOnClick: true,
+      pauseOnFocusLoss: false,
+      pauseOnHover: true,
     });
-  }
+  });
 
-  connect(url: string, callback: VoidFunction) {
+  let connect = (url: string, callback: VoidFunction) => {
     console.log("Attemping Connection");
     toast.dismiss();
-    this.setState({
-      url: url,
-      connecting: true
-    })
+    setUrl(url);
+    setConnecting(true);
     try {
-      this.state.ros.connect(`ws://${url}:8080`);
-      this.state.ros.on('connection', () => {
+      ros.connect(`ws://${url}:8080`);
+      ros.on('connection', () => {
         // This isn't a great solution because an additional callback is created each time connect() is called.
         // If the connection fails twice and then succeeds on the third attempt, callback() is called 3 times.
         callback();
       })
-
     } catch (e) {
       console.log("Failed to create ros instance", e)
     }
   }
 
-  disconnect() {
+  let disconnect = () => {
     toast.dismiss();
-    this.state.ros.close();
-    this.setState({
-      isConnected: false
-    })
+    ros.close();
+    setIsConnected(false);
     localStorage.removeItem("rosServerAddress");
     toast.info('Disconnected.', {
       position: "top-right",
@@ -93,19 +71,18 @@ class ROSProvider extends Component<IProps, IState> {
     });
   }
 
-  render() {
-    return (
-      <ROSContext.Provider value={
-          {
-            connect: this.connect.bind(this),
-            disconnect: this.disconnect.bind(this),
-            ...this.state
-          }
-        }>
-        {this.props.children}
-      </ROSContext.Provider>
-    )
-  }
+  return (
+    <ROSContext.Provider value={
+      {
+        connect: connect,
+        disconnect: disconnect,
+        ros: ros,
+        url: url,
+        isConnected: isConnected,
+        connecting: connecting
+      }
+    }>
+    {props.children}
+  </ROSContext.Provider>
+  )
 }
-
-export default ROSProvider;
