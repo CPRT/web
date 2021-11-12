@@ -17,12 +17,11 @@ class Dashboard extends Component<IProps, IState> {
 
   render(){
     return (
-          <div>
-            <Layout/>
-            <StreamViewer host={this.context.address} port={8081} topic="/camera/image_raw" quality={80}/>
-            <StreamViewer host={this.context.address} port={8081} topic="/zed2/depth/depth_registered" quality={80}/>
-            <CustomGamepad ros={this.context.ros}/>
-          </div>
+      <Layout>
+        <StreamViewer host={this.context.url} port={8081} topic="/camera/image_raw" quality={80}/>
+        <StreamViewer host={this.context.url} port={8081} topic="/zed2/depth/depth_registered" quality={80}/>
+        <CustomGamepad ros={this.context.ros}/>
+      </Layout>
     );
   }
 }

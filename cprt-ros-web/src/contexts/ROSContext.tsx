@@ -5,7 +5,9 @@ export interface IROS {
   ros: ROSLIB.Ros;
   url: string;
   connecting: boolean;
-  connect: (url: string) => void;
+  isConnected: boolean;
+  connect: (url: string, callback: VoidFunction) => void;
+  disconnect: () => void;
 }
 
 const ROSContext = React.createContext<IROS>({} as IROS);

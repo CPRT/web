@@ -81,7 +81,6 @@ class CustomGamepad extends Component {
     }
 
     axisChangeHandler(axisName, value, previousValue) {
-      console.log(axisName, value)
       if (axisName === 'LeftStickY') {
         this.setState({
           leftY: value
@@ -94,17 +93,12 @@ class CustomGamepad extends Component {
       this.sendCmdVelMsg();
     }
 
-    buttonChangeHandler(buttonName, down) {
-      console.log(buttonName, down)
-    }
-
   render() {
     return (
       <Gamepad
         onConnect={this.connectHandler.bind(this)}
         onDisconnect={this.disconnectHandler.bind(this)}
 
-        onButtonChange={this.buttonChangeHandler.bind(this)}
         onAxisChange={this.axisChangeHandler.bind(this)}
       >
         <React.Fragment/>

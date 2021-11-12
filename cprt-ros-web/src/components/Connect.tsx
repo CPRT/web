@@ -1,58 +1,55 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import { TextField, Grid, Paper, Box}  from '@mui/material';
 import ROSContext from '../contexts/ROSContext';
 import ConnectButton from './ConnectButton';
+import {useNavigate, useLocation} from 'react-router-dom';
 
-interface IProps {
-}
-interface IState {
-  address: string;
-}
+function Connect(){
+  // Context
+  let navigate = useNavigate();
+  let location = useLocation();
+  let ros = useContext(ROSContext);
 
-class Connect extends Component<IProps, IState> {
-  static contextType = ROSContext;
-  constructor(props: IProps) {
-    super(props)
+  // State
+  let [address, setAddress] = React.useState<string>("localhost");
+  let from = location.state?.from?.pathname || "/";
 
-    this.state = {
-      address: "localhost",
-    }
-  }
-
-  handleChange(e: React.SyntheticEvent){
-    let target = e.target as HTMLInputElement;
-    this.setState({address: target.value})
-  }
-
-  handleSubmit = (e: React.SyntheticEvent) => {
+  // Methods
+  let handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (this.state.address){
-      this.context.connect(this.state.address);
+    if (address){
+      localStorage.setItem("rosServerAddress", address);
+      ros.connect(address, () => {
+        navigate(from, {replace: true});
+      });
     }
-  }
+  };
 
-  render() {
-    return (
-      <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
-        <Grid item lg={4} md={6} sm={8}>
-          <Paper>
-            <Box p={1}>
-              <form onSubmit={this.handleSubmit.bind(this)}>
-              <Grid container direction="row" spacing={2} justifyContent="left" alignItems="center">
-                <Grid item xs={9}>
-                  <TextField required fullWidth id="address" onChange={this.handleChange.bind(this)} value={this.state.address} label="Rover IP"/>
-                </Grid>
-                <Grid item xs={3}>
-                  <ConnectButton connecting={this.context.connecting}/>
-                </Grid>
-                </Grid>
-              </form>
-            </Box>
-          </Paper>
-        </Grid>
+  let handleChange = (e: React.SyntheticEvent) => {
+    let target = e.target as HTMLInputElement;
+    setAddress(target.value);
+  };
+
+  return (
+    <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
+      <Grid item lg={4} md={6} sm={8}>
+        <Paper>
+          <Box p={1}>
+            <form onSubmit={handleSubmit}>
+            <Grid container direction="row" spacing={2} justifyContent="left" alignItems="center">
+              <Grid item xs={9}>
+                <TextField required fullWidth id="address" onChange={handleChange} value={address} label="Rover IP"/>
+              </Grid>
+              <Grid item xs={3}>
+                <ConnectButton connecting={ros.connecting}/>
+              </Grid>
+              </Grid>
+            </form>
+          </Box>
+        </Paper>
       </Grid>
-    )
-  }
+    </Grid>
+  )
 }
 
 export default Connect
