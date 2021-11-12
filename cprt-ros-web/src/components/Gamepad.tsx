@@ -3,6 +3,8 @@ import React, { useContext, useState, useEffect } from "react";
 import ROSContext from "../contexts/ROSContext";
 import ROSLIB from "roslib";
 
+let lastCall = Date.now();
+
 function CustomGamepad(): React.ReactElement {
   const ros = useContext(ROSContext);
 
@@ -10,7 +12,6 @@ function CustomGamepad(): React.ReactElement {
     ros: ros.ros,
     name: "/cmd_vel",
     messageType: "geometry_msgs/Twist",
-    throttle_rate: 100, //100ms timeout; Don't send messages more than 10/second
   });
 
   // State
@@ -21,29 +22,31 @@ function CustomGamepad(): React.ReactElement {
 
   // Lifecycle
   useEffect(() => {
-    const interval = setInterval(() => {
-      sendCmdVelMsg();
-    }, 100); //Send message every 100ms
+    const interval = setInterval(() => sendCmdVelMsg(), 100); //Send message every 50ms
     return () => clearInterval(interval);
   });
 
   // Methods
   const sendCmdVelMsg = () => {
-    const linear_vel = (leftY + rightY) / 2.0; // (m/s) TODO: Multiply by maximum speed of rover in m/s
-    const angular_vel = (rightY - leftY) / 2.0; // (rad/s)
-    const message = new ROSLIB.Message({
-      linear: {
-        x: linear_vel,
-        y: 0,
-        z: 0,
-      },
-      angular: {
-        x: 0,
-        y: 0,
-        z: angular_vel,
-      },
-    });
-    cmdVel.publish(message);
+    if (Date.now() - lastCall > 50) {
+      lastCall = Date.now();
+      const linear_vel = (leftY + rightY) / 2.0; // (m/s) TODO: Multiply by maximum speed of rover in m/s
+      const angular_vel = (rightY - leftY) / 2.0; // (rad/s)
+      const message = new ROSLIB.Message({
+        linear: {
+          x: linear_vel,
+          y: 0,
+          z: 0,
+        },
+        angular: {
+          x: 0,
+          y: 0,
+          z: angular_vel,
+        },
+      });
+      console.log("Sending Message", Date.now());
+      cmdVel.publish(message);
+    }
   };
 
   const connectHandler = () => {
@@ -76,6 +79,7 @@ function CustomGamepad(): React.ReactElement {
     } else if (axisName === "RightStickY") {
       setRightY(value);
     }
+    sendCmdVelMsg();
   };
 
   // Render

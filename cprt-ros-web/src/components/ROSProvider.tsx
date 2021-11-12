@@ -38,25 +38,45 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
     ros.on("error", (error) => {
       console.log(error);
       localStorage.removeItem("rosServerAddress");
-      setConnection({
-        ...connection,
-        isConnected: false,
-        isConnecting: false,
-      });
-      toast.error("Connection Failed.", {
-        position: "top-right",
-        autoClose: 5000,
-        closeOnClick: true,
-        pauseOnFocusLoss: false,
-        pauseOnHover: true,
-        draggable: false,
-      });
+    });
+
+    ros.on("close", (e) => {
+      toast.dismiss();
+      if (e.wasClean) {
+        console.log("Disconnected.");
+        setConnection({
+          ...connection,
+          isConnected: false,
+          isConnecting: false,
+        });
+        toast.info("Disconnected.", {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnFocusLoss: false,
+          pauseOnHover: true,
+          draggable: false,
+        });
+      } else {
+        setConnection({
+          ...connection,
+          isConnected: false,
+          isConnecting: false,
+        });
+        toast.error("Connection Failed.", {
+          position: "top-right",
+          autoClose: 5000,
+          closeOnClick: true,
+          pauseOnFocusLoss: false,
+          pauseOnHover: true,
+          draggable: false,
+        });
+      }
     });
   }, []);
 
   const connect = (url: string, callback: VoidFunction) => {
     console.log("Attemping Connection");
-    toast.dismiss();
     setConnection({
       ...connection,
       url: url,
@@ -75,22 +95,8 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
   };
 
   const disconnect = () => {
-    console.log("Disconnecting.");
-    toast.dismiss();
     ros.close();
-    setConnection({
-      ...connection,
-      isConnected: false,
-    });
     localStorage.removeItem("rosServerAddress");
-    toast.info("Disconnected.", {
-      position: "top-right",
-      autoClose: 5000,
-      closeOnClick: true,
-      pauseOnFocusLoss: false,
-      pauseOnHover: true,
-      draggable: false,
-    });
   };
 
   return (
