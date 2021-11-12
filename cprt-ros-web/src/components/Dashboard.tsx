@@ -10,13 +10,13 @@ function Dashboard(): React.ReactElement {
   return (
     <Layout>
       <StreamViewer
-        host={ros.url}
+        host={ros.connection.url}
         port={8081}
         topic="/camera/image_raw"
         quality={80}
       />
       <StreamViewer
-        host={ros.url}
+        host={ros.connection.url}
         port={8081}
         topic="/zed2/depth/depth_registered"
         quality={80}

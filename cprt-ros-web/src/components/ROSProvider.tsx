@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ROSLIB from "roslib";
-import ROSContext from "../contexts/ROSContext";
+import ROSContext, { ROSConnection } from "../contexts/ROSContext";
 import { toast } from "react-toastify";
 
 interface ROSProps {
@@ -9,42 +9,59 @@ interface ROSProps {
 
 export default function ROSProvider(props: ROSProps): React.ReactElement {
   const [ros] = useState<ROSLIB.Ros>(new ROSLIB.Ros({}));
-  const [url, setUrl] = useState<string>("localhost");
-  const [connecting, setConnecting] = useState<boolean>(false);
-  const [isConnected, setIsConnected] = useState<boolean>(false);
-
-  ros.on("connection", () => {
-    console.log("Connection Successful!");
-    setConnecting(false);
-    setIsConnected(true);
-    toast.success("Connection Successful!", {
-      position: "top-right",
-      autoClose: 5000,
-      closeOnClick: true,
-      pauseOnHover: true,
-      pauseOnFocusLoss: false,
-    });
+  const [connection, setConnection] = useState<ROSConnection>({
+    url: "localhost",
+    isConnected: false,
+    isConnecting: false,
   });
 
-  ros.on("error", (error) => {
-    console.log(error);
-    localStorage.removeItem("rosServerAddress");
-    setConnecting(false);
-    setIsConnected(false);
-    toast.error("Connection Failed.", {
-      position: "top-right",
-      autoClose: 5000,
-      closeOnClick: true,
-      pauseOnFocusLoss: false,
-      pauseOnHover: true,
+  //Create callbacks to notify on connection or connection failure.
+  // [] at the end of the useEffect call ensures the callbacks are only created once
+  useEffect(() => {
+    ros.on("connection", () => {
+      console.log("Connection Successful!");
+      setConnection({
+        ...connection,
+        isConnected: true,
+        isConnecting: false,
+      });
+      toast.success("Connection Successful!", {
+        position: "top-right",
+        autoClose: 5000,
+        closeOnClick: true,
+        pauseOnHover: true,
+        pauseOnFocusLoss: false,
+        draggable: false,
+      });
     });
-  });
+
+    ros.on("error", (error) => {
+      console.log(error);
+      localStorage.removeItem("rosServerAddress");
+      setConnection({
+        ...connection,
+        isConnected: false,
+        isConnecting: false,
+      });
+      toast.error("Connection Failed.", {
+        position: "top-right",
+        autoClose: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: false,
+        pauseOnHover: true,
+        draggable: false,
+      });
+    });
+  }, []);
 
   const connect = (url: string, callback: VoidFunction) => {
     console.log("Attemping Connection");
     toast.dismiss();
-    setUrl(url);
-    setConnecting(true);
+    setConnection({
+      ...connection,
+      url: url,
+      isConnecting: true,
+    });
     try {
       ros.connect(`ws://${url}:8080`);
       ros.on("connection", () => {
@@ -58,9 +75,13 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
   };
 
   const disconnect = () => {
+    console.log("Disconnecting.");
     toast.dismiss();
     ros.close();
-    setIsConnected(false);
+    setConnection({
+      ...connection,
+      isConnected: false,
+    });
     localStorage.removeItem("rosServerAddress");
     toast.info("Disconnected.", {
       position: "top-right",
@@ -68,6 +89,7 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
       closeOnClick: true,
       pauseOnFocusLoss: false,
       pauseOnHover: true,
+      draggable: false,
     });
   };
 
@@ -77,9 +99,7 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
         connect: connect,
         disconnect: disconnect,
         ros: ros,
-        url: url,
-        isConnected: isConnected,
-        connecting: connecting,
+        connection: connection,
       }}
     >
       {props.children}

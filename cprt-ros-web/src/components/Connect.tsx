@@ -59,7 +59,7 @@ function Connect(): React.ReactElement {
                   />
                 </Grid>
                 <Grid item xs={3}>
-                  <ConnectButton connecting={ros.connecting} />
+                  <ConnectButton connecting={ros.connection.isConnecting} />
                 </Grid>
               </Grid>
             </form>

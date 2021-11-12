@@ -17,7 +17,6 @@ export default function SettingsMenu(): React.ReactElement {
 
   const handleClick = (event: React.SyntheticEvent) => {
     setMenuOpen(true);
-    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
   };
 

@@ -1,11 +1,15 @@
 import React from "react";
 import ROSLIB from "roslib";
 
+export interface ROSConnection {
+  url: string;
+  isConnecting: boolean;
+  isConnected: boolean;
+}
+
 export interface IROS {
   ros: ROSLIB.Ros;
-  url: string;
-  connecting: boolean;
-  isConnected: boolean;
+  connection: ROSConnection;
   connect: (url: string, callback: VoidFunction) => void;
   disconnect: () => void;
 }
