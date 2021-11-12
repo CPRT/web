@@ -1,55 +1,73 @@
-import React, { useContext } from 'react';
-import { TextField, Grid, Paper, Box}  from '@mui/material';
-import ROSContext from '../contexts/ROSContext';
-import ConnectButton from './ConnectButton';
-import {useNavigate, useLocation} from 'react-router-dom';
+import React, { useContext } from "react";
+import { TextField, Grid, Paper, Box } from "@mui/material";
+import ROSContext from "../contexts/ROSContext";
+import ConnectButton from "./ConnectButton";
+import { useNavigate, useLocation } from "react-router-dom";
 
-function Connect(){
+function Connect(): React.ReactElement {
   // Context
-  let navigate = useNavigate();
-  let location = useLocation();
-  let ros = useContext(ROSContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const ros = useContext(ROSContext);
 
   // State
-  let [address, setAddress] = React.useState<string>("localhost");
-  let from = location.state?.from?.pathname || "/";
+  const [address, setAddress] = React.useState<string>("localhost");
+  const from = location.state?.from?.pathname || "/";
 
   // Methods
-  let handleSubmit = (e: React.SyntheticEvent) => {
+  const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    if (address){
+    if (address) {
       localStorage.setItem("rosServerAddress", address);
       ros.connect(address, () => {
-        navigate(from, {replace: true});
+        navigate(from, { replace: true });
       });
     }
   };
 
-  let handleChange = (e: React.SyntheticEvent) => {
-    let target = e.target as HTMLInputElement;
+  const handleChange = (e: React.SyntheticEvent) => {
+    const target = e.target as HTMLInputElement;
     setAddress(target.value);
   };
 
   return (
-    <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '100vh' }}>
+    <Grid
+      container
+      justifyContent="center"
+      alignItems="center"
+      style={{ minHeight: "100vh" }}
+    >
       <Grid item lg={4} md={6} sm={8}>
         <Paper>
           <Box p={1}>
             <form onSubmit={handleSubmit}>
-            <Grid container direction="row" spacing={2} justifyContent="left" alignItems="center">
-              <Grid item xs={9}>
-                <TextField required fullWidth id="address" onChange={handleChange} value={address} label="Rover IP"/>
-              </Grid>
-              <Grid item xs={3}>
-                <ConnectButton connecting={ros.connecting}/>
-              </Grid>
+              <Grid
+                container
+                direction="row"
+                spacing={2}
+                justifyContent="left"
+                alignItems="center"
+              >
+                <Grid item xs={9}>
+                  <TextField
+                    required
+                    fullWidth
+                    id="address"
+                    onChange={handleChange}
+                    value={address}
+                    label="Rover IP"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <ConnectButton connecting={ros.connecting} />
+                </Grid>
               </Grid>
             </form>
           </Box>
         </Paper>
       </Grid>
     </Grid>
-  )
+  );
 }
 
-export default Connect
+export default Connect;

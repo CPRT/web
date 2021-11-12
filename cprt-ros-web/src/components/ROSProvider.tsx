@@ -1,23 +1,23 @@
-import React, { useState } from 'react';
-import ROSLIB from 'roslib';
-import ROSContext from '../contexts/ROSContext';
-import { toast } from 'react-toastify';
+import React, { useState } from "react";
+import ROSLIB from "roslib";
+import ROSContext from "../contexts/ROSContext";
+import { toast } from "react-toastify";
 
 interface ROSProps {
   children?: React.ReactChildren;
 }
 
-export default function ROSProvider(props: ROSProps) {
-  let [ros, setROS] = useState<ROSLIB.Ros>(new ROSLIB.Ros({}));
-  let [url, setUrl] = useState<string>("localhost");
-  let [connecting, setConnecting] = useState<boolean>(false);
-  let [isConnected, setIsConnected] = useState<boolean>(false);
+export default function ROSProvider(props: ROSProps): React.ReactElement {
+  const [ros] = useState<ROSLIB.Ros>(new ROSLIB.Ros({}));
+  const [url, setUrl] = useState<string>("localhost");
+  const [connecting, setConnecting] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
-  ros.on('connection', () => {
-    console.log('Connection Successful!')
+  ros.on("connection", () => {
+    console.log("Connection Successful!");
     setConnecting(false);
     setIsConnected(true);
-    toast.success('Connection Successful!', {
+    toast.success("Connection Successful!", {
       position: "top-right",
       autoClose: 5000,
       closeOnClick: true,
@@ -26,12 +26,12 @@ export default function ROSProvider(props: ROSProps) {
     });
   });
 
-  ros.on('error', (error) => {
-    console.log(error)
+  ros.on("error", (error) => {
+    console.log(error);
     localStorage.removeItem("rosServerAddress");
     setConnecting(false);
     setIsConnected(false);
-    toast.error('Connection Failed.', {
+    toast.error("Connection Failed.", {
       position: "top-right",
       autoClose: 5000,
       closeOnClick: true,
@@ -40,49 +40,49 @@ export default function ROSProvider(props: ROSProps) {
     });
   });
 
-  let connect = (url: string, callback: VoidFunction) => {
+  const connect = (url: string, callback: VoidFunction) => {
     console.log("Attemping Connection");
     toast.dismiss();
     setUrl(url);
     setConnecting(true);
     try {
       ros.connect(`ws://${url}:8080`);
-      ros.on('connection', () => {
+      ros.on("connection", () => {
         // This isn't a great solution because an additional callback is created each time connect() is called.
         // If the connection fails twice and then succeeds on the third attempt, callback() is called 3 times.
         callback();
-      })
+      });
     } catch (e) {
-      console.log("Failed to create ros instance", e)
+      console.log("Failed to create ros instance", e);
     }
-  }
+  };
 
-  let disconnect = () => {
+  const disconnect = () => {
     toast.dismiss();
     ros.close();
     setIsConnected(false);
     localStorage.removeItem("rosServerAddress");
-    toast.info('Disconnected.', {
+    toast.info("Disconnected.", {
       position: "top-right",
       autoClose: 5000,
       closeOnClick: true,
       pauseOnFocusLoss: false,
       pauseOnHover: true,
     });
-  }
+  };
 
   return (
-    <ROSContext.Provider value={
-      {
+    <ROSContext.Provider
+      value={{
         connect: connect,
         disconnect: disconnect,
         ros: ros,
         url: url,
         isConnected: isConnected,
-        connecting: connecting
-      }
-    }>
-    {props.children}
-  </ROSContext.Provider>
-  )
+        connecting: connecting,
+      }}
+    >
+      {props.children}
+    </ROSContext.Provider>
+  );
 }

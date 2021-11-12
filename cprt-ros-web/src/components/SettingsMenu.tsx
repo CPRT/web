@@ -1,33 +1,39 @@
-import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
-import { Menu, MenuItem, IconButton, ListItemIcon, ListItemText } from '@mui/material';
-import SettingsIcon from '@mui/icons-material/Settings';
-import React, { useContext, useState } from 'react';
-import ROSContext from '../contexts/ROSContext';
+import React, { useContext, useState } from "react";
+import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ROSContext from "../contexts/ROSContext";
+import {
+  Menu,
+  MenuItem,
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 
+export default function SettingsMenu(): React.ReactElement {
+  const ros = useContext(ROSContext);
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
 
-export default function SettingsMenu() {
-  let ros = useContext(ROSContext);
-  let [anchorEl, setAnchorEl] = useState<any>(null);
-  let [menuOpen, setMenuOpen] = useState<boolean>(false);
-
-  let handleClick = (event: React.SyntheticEvent) => {
+  const handleClick = (event: React.SyntheticEvent) => {
     setMenuOpen(true);
+    console.log(event.currentTarget);
     setAnchorEl(event.currentTarget);
-  }
+  };
 
-  let handleClose = () => {
+  const handleClose = () => {
     setMenuOpen(false);
     setAnchorEl(null);
-  }
+  };
 
-  let handleDisconnect = () => {
+  const handleDisconnect = () => {
     ros.disconnect();
-  }
+  };
 
   return (
     <React.Fragment>
       <IconButton onClick={handleClick} color="inherit">
-        <SettingsIcon/>
+        <SettingsIcon />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -37,39 +43,39 @@ export default function SettingsMenu() {
         PaperProps={{
           elevation: 0,
           sx: {
-            overflow: 'visible',
-            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            overflow: "visible",
+            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
             mt: 1.5,
-            '& .MuiAvatar-root': {
+            "& .MuiAvatar-root": {
               width: 32,
               height: 32,
               ml: -0.5,
               mr: 1,
             },
-            '&:before': {
-              content: '""',
-              display: 'block',
-              position: 'absolute',
+            "&:before": {
+              content: "''",
+              display: "block",
+              position: "absolute",
               top: 0,
               right: 14,
               width: 10,
               height: 10,
-              bgcolor: 'background.paper',
-              transform: 'translateY(-50%) rotate(45deg)',
+              bgcolor: "background.paper",
+              transform: "translateY(-50%) rotate(45deg)",
               zIndex: 0,
             },
           },
         }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        transformOrigin={{ horizontal: "right", vertical: "top" }}
+        anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-      <MenuItem onClick={handleDisconnect}>
-        <ListItemIcon>
-          <RemoveCircleIcon/>
-        </ListItemIcon>
-        <ListItemText>Disconnect</ListItemText>
-      </MenuItem>
-    </Menu>
+        <MenuItem onClick={handleDisconnect}>
+          <ListItemIcon>
+            <RemoveCircleIcon />
+          </ListItemIcon>
+          <ListItemText>Disconnect</ListItemText>
+        </MenuItem>
+      </Menu>
     </React.Fragment>
-  )
+  );
 }
