@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Dashboard from './components/Dashboard';
 import Connect from './components/Connect';
 import * as serviceWorker from './serviceWorker';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import ROSProvider from './components/ROSProvider';
 import RequireROS from './components/RequireROS';
 import { ToastContainer } from 'react-toastify';
@@ -20,7 +20,8 @@ ReactDOM.render(
             <RequireROS>
               <Dashboard/>
             </RequireROS>}
-          />  
+          /> 
+          <Route path="*" element={<Navigate to="/"/>} /> 
         </Routes>
       </ROSProvider>
     </BrowserRouter>
