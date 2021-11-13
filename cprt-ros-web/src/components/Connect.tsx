@@ -11,7 +11,9 @@ function Connect(): React.ReactElement {
   const ros = useContext(ROSContext);
 
   // State
-  const [address, setAddress] = React.useState<string>("localhost");
+  const [address, setAddress] = React.useState<string>(
+    window.location.host.split(":")[0] //Set the address serving the page as the default ROS server address
+  );
   const from = location.state?.from?.pathname || "/";
 
   // Methods

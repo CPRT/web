@@ -7,6 +7,8 @@ interface ROSProps {
   children?: React.ReactChildren;
 }
 
+// Implements the React Context API to be able to inject the ROSLIB.Ros
+// object into any component that need it
 export default function ROSProvider(props: ROSProps): React.ReactElement {
   const [ros] = useState<ROSLIB.Ros>(new ROSLIB.Ros({}));
   const [connection, setConnection] = useState<ROSConnection>({
@@ -18,6 +20,7 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
   //Create callbacks to notify on connection or connection failure.
   // [] at the end of the useEffect call ensures the callbacks are only created once
   useEffect(() => {
+    // 'connection' callback is called when a successful connection is established to ROS server
     ros.on("connection", () => {
       console.log("Connection Successful!");
       setConnection({
@@ -35,11 +38,15 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
       });
     });
 
+    // 'error' is called when an error occurs during the connection process
+    // Note: 'error' is not called for broken connections
     ros.on("error", (error) => {
       console.log(error);
       localStorage.removeItem("rosServerAddress");
     });
 
+    // 'close' callback is called whenever the connection to the ROS server is closed
+    // The e.wasClean flag can be used to determine whether the connection was closed gracefully.
     ros.on("close", (e) => {
       toast.dismiss();
       if (e.wasClean) {
