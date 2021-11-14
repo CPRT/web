@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import MJPEGCANVAS from "mjpegcanvas";
 import uniqueId from "lodash/uniqueId";
 
@@ -11,16 +11,24 @@ interface StreamProps {
 
 export default function MjpegStream(props: StreamProps): React.ReactElement {
   const [id] = useState<string>(uniqueId("mjpeg-"));
+  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(null);
+  const div = useCallback((node) => {
+    if (node !== null) {
+      setHeight(node.getBoundingClientRect().height);
+      setWidth(node.getBoundingClientRect().width);
+    }
+  }, []);
 
   useEffect(() => {
     new MJPEGCANVAS.Viewer({
       divID: id,
       host: props.host,
       port: props.port,
-      width: 320,
-      height: 240,
-      // height : this.refs.child.parentNode.clientHeight,
-      // width : this.refs.child.parentNode.clientWidth,
+      // width: "100%",
+      height: 320,
+      // height: height,
+      width: width,
       topic: props.topic,
       interval: 30,
       quality: props.quality,
@@ -28,5 +36,5 @@ export default function MjpegStream(props: StreamProps): React.ReactElement {
   });
 
   // return <div id={id} ref="child" />;
-  return <div id={id} />;
+  return <div id={id} ref={div} style={{ height: "100%" }} />;
 }

@@ -44,7 +44,7 @@ function CustomGamepad(): React.ReactElement {
           z: angular_vel,
         },
       });
-      console.log("Sending Message", Date.now());
+      // console.log("Sending Message", Date.now());
       cmdVel.publish(message);
     }
   };
