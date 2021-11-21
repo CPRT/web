@@ -1,33 +1,17 @@
 import React, { ReactElement, useState } from "react";
-import {
-  MenuItem,
-  Menu,
-  Popover,
-  Grid,
-  IconButton,
-  TextField,
-} from "@mui/material";
 import MapGL, { Source, Layer, LayerProps, MapEvent } from "react-map-gl";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import CheckIcon from "@mui/icons-material/Check";
 import * as GeoJSON from "geojson";
 import Markers, { MarkerState } from "./MapMarkers";
 import { CallbackEvent } from "react-map-gl/src/components/draggable-control";
 import update from "immutability-helper";
+import MapContextMenu, { ContextMenuState } from "./MapContextMenu";
+import MarkerMenu from "./MarkerMenu";
 
 const EMPTY_STYLE = {
   version: 8,
   sources: {},
   layers: [],
 };
-
-interface ContextMenuState {
-  mouseX: number;
-  mouseY: number;
-  mouseLng: number;
-  mouseLat: number;
-}
 
 export default function Map(): ReactElement {
   const [viewport, setViewPort] = useState({
@@ -41,38 +25,10 @@ export default function Map(): ReactElement {
   const [markers, setMarkers] = useState<MarkerState[]>([]);
   const [activeMarker, setActiveMarker] = useState<number>(-1);
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorEl2, setAnchorEl2] = React.useState<null | HTMLElement>(null);
-  const [latInput, setLatInput] = React.useState<number | null>(null);
-  const [lngInput, setLngInput] = React.useState<number | null>(null);
+  const [markerMenuAnchorEl, setMarkerMenuAnchorEl] =
+    React.useState<null | HTMLElement>(null);
 
-  const open2 = Boolean(anchorEl2);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event: MapEvent, index: number) => {
-    setAnchorEl(event.target);
-    setActiveMarker(index);
-  };
-  const handleCloseMenu = () => {
-    setAnchorEl(null);
-    setActiveMarker(-1);
-  };
-
-  const handleClick2 = () => {
-    setAnchorEl2(anchorEl);
-    setAnchorEl(null);
-    setLatInput(markers[activeMarker].lat);
-    setLngInput(markers[activeMarker].long);
-  };
-
-  const handleCloseMenu2 = () => {
-    setAnchorEl2(null);
-    setActiveMarker(-1);
-  };
-
-  const [contextMenu, setContextMenu] = React.useState<ContextMenuState | null>(
-    null
-  );
+  const [contextMenu, setContextMenu] = useState<ContextMenuState | null>(null);
 
   const handleContextMenu = (event: MapEvent) => {
     event.preventDefault();
@@ -90,6 +46,22 @@ export default function Map(): ReactElement {
 
   const handleClose = () => {
     setContextMenu(null);
+  };
+
+  const handleClickMarkerMenu = (event: MapEvent, index: number) => {
+    setMarkerMenuAnchorEl(event.target);
+    setActiveMarker(index);
+  };
+
+  const handleCloseMarkerMenu = () => {
+    setMarkerMenuAnchorEl(null);
+  };
+
+  const getMarker = (index?: number) => {
+    if (index != undefined) {
+      return markers[index];
+    }
+    return markers[activeMarker];
   };
 
   const createMarker = () => {
@@ -122,10 +94,10 @@ export default function Map(): ReactElement {
     },
   };
 
-  const updateMarker = (index: number, lat: number, lng: number) => {
+  const updateMarker = (lat: number, lng: number, index?: number) => {
     setMarkers((markers) =>
       update(markers, {
-        [index]: {
+        [index == undefined ? activeMarker : index]: {
           lat: { $set: lat },
           long: { $set: lng },
         },
@@ -134,22 +106,15 @@ export default function Map(): ReactElement {
   };
 
   const onDrag = (event: CallbackEvent, index: number) => {
-    updateMarker(index, event.lngLat[1], event.lngLat[0]);
+    updateMarker(event.lngLat[1], event.lngLat[0], index);
   };
 
-  const removeMarker = (index: number) => {
-    if (index != -1) {
+  const removeMarker = (index?: number) => {
+    if (index != undefined) {
       setMarkers((markers) => update(markers, { $splice: [[index, 1]] }));
+      return;
     }
-    handleCloseMenu();
-  };
-
-  const handleSubmit = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    handleCloseMenu2();
-    if (latInput && lngInput) {
-      updateMarker(activeMarker, latInput, lngInput);
-    }
+    setMarkers((markers) => update(markers, { $splice: [[activeMarker, 1]] }));
   };
 
   return (
@@ -174,91 +139,24 @@ export default function Map(): ReactElement {
         <Source id="my-data" type="geojson" data={geojson}>
           <Layer {...layerStyle} />
         </Source>
-        <Markers markers={markers} onDrag={onDrag} onClick={handleClick} />
+        <Markers
+          markers={markers}
+          onDrag={onDrag}
+          onClick={handleClickMarkerMenu}
+        />
       </MapGL>
-      <Menu
-        open={contextMenu !== null}
-        onClose={handleClose}
-        anchorReference="anchorPosition"
-        anchorPosition={
-          contextMenu !== null
-            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
-            : undefined
-        }
-      >
-        <MenuItem onClick={createMarker}>Create Marker</MenuItem>
-      </Menu>
-      <Popover
-        anchorEl={anchorEl2}
-        open={open2}
-        onClose={handleCloseMenu2}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        PaperProps={{
-          style: { width: 250 },
-        }}
-      >
-        <form onSubmit={handleSubmit}>
-          <Grid
-            container
-            padding={1}
-            spacing={1}
-            columns={5}
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item xs={2}>
-              <TextField
-                label="Latitude"
-                value={latInput}
-                onChange={(event) =>
-                  setLatInput(parseFloat(event.target.value))
-                }
-                size="small"
-              />
-            </Grid>
-            <Grid item xs={2}>
-              <TextField
-                label="Longitude"
-                value={lngInput}
-                onChange={(event) =>
-                  setLngInput(parseFloat(event.target.value))
-                }
-                size="small"
-              />
-            </Grid>
-            <Grid item xs={1}>
-              <IconButton size="medium" type="submit">
-                <CheckIcon fontSize="inherit" />
-              </IconButton>
-            </Grid>
-          </Grid>
-        </form>
-      </Popover>
-      <Popover
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-      >
-        <Grid container>
-          <Grid item>
-            <IconButton onClick={() => removeMarker(activeMarker)} size="small">
-              <DeleteIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <IconButton onClick={handleClick2} size="small">
-              <EditIcon fontSize="inherit" />
-            </IconButton>
-          </Grid>
-        </Grid>
-      </Popover>
+      <MapContextMenu
+        createMarker={createMarker}
+        contextMenu={contextMenu}
+        handleCloseContextMenu={handleClose}
+      />
+      <MarkerMenu
+        markerMenuAnchorEl={markerMenuAnchorEl}
+        handleCloseMarkerMenu={handleCloseMarkerMenu}
+        getMarker={getMarker}
+        updateMarker={updateMarker}
+        removeMarker={removeMarker}
+      />
     </React.Fragment>
   );
 }
