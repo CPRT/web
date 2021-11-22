@@ -6,6 +6,7 @@ import { CallbackEvent } from "react-map-gl/src/components/draggable-control";
 import update from "immutability-helper";
 import MapContextMenu, { ContextMenuState } from "./MapContextMenu";
 import MarkerMenu from "./MarkerMenu";
+import RoverLocation from "./RoverLocation";
 
 const EMPTY_STYLE = {
   version: 8,
@@ -144,6 +145,7 @@ export default function Map(): ReactElement {
           onDrag={onDrag}
           onClick={handleClickMarkerMenu}
         />
+        <RoverLocation />
       </MapGL>
       <MapContextMenu
         createMarker={createMarker}
