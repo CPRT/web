@@ -90,7 +90,7 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
       isConnecting: true,
     });
     try {
-      ros.connect(`ws://${url}:8080`);
+      ros.connect(`ws://${url}:9090`);
       ros.on("connection", () => {
         // This isn't a great solution because an additional callback is created each time connect() is called.
         // If the connection fails twice and then succeeds on the third attempt, callback() is called 3 times.
