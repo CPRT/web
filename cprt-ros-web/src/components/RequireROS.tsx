@@ -14,8 +14,6 @@ function RequireROS(props: RequireROSProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const from = location.state?.from?.pathname || "/";
-
   const savedAddress = localStorage.getItem("rosServerAddress");
 
   useEffect(() => {
@@ -25,7 +23,7 @@ function RequireROS(props: RequireROSProps): React.ReactElement {
       savedAddress
     ) {
       ros.connect(savedAddress, () => {
-        navigate(from, { replace: true });
+        navigate(location.pathname, { replace: true });
       });
     }
   });

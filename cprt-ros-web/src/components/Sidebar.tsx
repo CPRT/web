@@ -2,7 +2,7 @@ import React from "react";
 import {
   Divider,
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Drawer as MuiDrawer,
@@ -11,9 +11,11 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import SportsEsportsIcon from "@mui/icons-material/SportsEsports";
 import { styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -34,9 +36,6 @@ const Drawer = styled(MuiDrawer, {
         duration: theme.transitions.duration.leavingScreen,
       }),
       width: theme.spacing(7),
-      [theme.breakpoints.up("sm")]: {
-        width: theme.spacing(9),
-      },
     }),
   },
 }));
@@ -63,12 +62,18 @@ export default function Sidebar(props: SidebarProps): React.ReactElement {
       </Toolbar>
       <Divider />
       <List>
-        <ListItem button>
+        <ListItemButton component={Link} to="/">
           <ListItemIcon>
             <DashboardIcon />
           </ListItemIcon>
           <ListItemText primary="Dashboard" />
-        </ListItem>
+        </ListItemButton>
+        <ListItemButton component={Link} to="/control">
+          <ListItemIcon>
+            <SportsEsportsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Control" />
+        </ListItemButton>
       </List>
     </Drawer>
   );

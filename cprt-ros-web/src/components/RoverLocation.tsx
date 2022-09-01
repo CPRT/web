@@ -12,7 +12,7 @@ interface Coordinate {
   lng: number;
 }
 
-export default function RoverLocation() {
+export default function RoverLocation(): React.ReactElement {
   const ros = useContext(ROSContext);
   const [roverPosition, setRoverPosition] = useState<Coordinate | null>(null);
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);

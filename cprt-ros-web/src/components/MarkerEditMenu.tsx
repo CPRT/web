@@ -12,7 +12,9 @@ interface MarkerEditMenuProps {
   setLngInput: (lng: number | null) => void;
 }
 
-export default function MarkerEditMenu(props: MarkerEditMenuProps) {
+export default function MarkerEditMenu(
+  props: MarkerEditMenuProps
+): React.ReactElement {
   const {
     latInput,
     lngInput,

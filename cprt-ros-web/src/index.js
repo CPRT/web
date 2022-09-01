@@ -1,13 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import Dashboard from "./components/Dashboard";
 import Connect from "./components/Connect";
 import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ROSProvider from "./components/ROSProvider";
 import RequireROS from "./components/RequireROS";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Layout from "./components/Layout";
+import Dashboard from "./components/Dashboard";
+import ControlTab from "./components/ControlTab";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -20,11 +22,13 @@ ReactDOM.render(
             path="/"
             element={
               <RequireROS>
-                <Dashboard />
+                <Layout />
               </RequireROS>
             }
-          />
-          <Route path="*" element={<Navigate to="/" />} />
+          >
+            <Route path="" element={<Dashboard />} />
+            <Route path="control" element={<ControlTab />} />
+          </Route>
         </Routes>
       </ROSProvider>
     </BrowserRouter>

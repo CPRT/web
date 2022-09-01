@@ -11,11 +11,11 @@ interface StreamProps {
 
 export default function MjpegStream(props: StreamProps): React.ReactElement {
   const [id] = useState<string>(uniqueId("mjpeg-"));
-  const [height, setHeight] = useState(null);
+  // const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
   const div = useCallback((node) => {
     if (node !== null) {
-      setHeight(node.getBoundingClientRect().height);
+      // setHeight(node.getBoundingClientRect().height);
       setWidth(node.getBoundingClientRect().width);
     }
   }, []);

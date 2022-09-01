@@ -4,14 +4,11 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Sidebar from "./Sidebar";
 import { Box, Toolbar } from "@mui/material";
 import Header from "./Header";
-
-interface LayoutProps {
-  children?: React.ReactNode;
-}
+import { Outlet } from "react-router-dom";
 
 const mdTheme = createTheme();
 
-function Layout(props: LayoutProps): React.ReactElement {
+function Layout(): React.ReactElement {
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const toggleDrawer = () => setDrawerOpen(!drawerOpen);
@@ -35,7 +32,7 @@ function Layout(props: LayoutProps): React.ReactElement {
           }}
         >
           <Toolbar />
-          {props.children}
+          <Outlet context={drawerOpen} />
         </Box>
       </Box>
     </ThemeProvider>

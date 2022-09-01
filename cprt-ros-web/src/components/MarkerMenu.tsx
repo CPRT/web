@@ -13,7 +13,7 @@ interface MarkerMenuProps {
   handleCloseMarkerMenu: VoidFunction;
 }
 
-export default function MarkerMenu(props: MarkerMenuProps) {
+export default function MarkerMenu(props: MarkerMenuProps): React.ReactElement {
   const {
     markerMenuAnchorEl,
     getMarker,
