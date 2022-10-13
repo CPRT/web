@@ -1,29 +1,10 @@
-cd /cprt-ros-web
-
-npm install
-# web
+# CPRT Rover Web Interface
 Web interface for monitoring rover systems and issuing commands
 
-> Note: Before launching the docker-compose stack, modify the websocket address in `cprt-ros-web/src/App.js` to localhost.
+Install [Docker](https://docs.docker.com/engine/install/) and [Docker-Compose](https://docs.docker.com/compose/install/) before proceeding.
 
-# ROS setup
+## Development
+Run `docker-compose up -d`. This will launch a docker container running the web app and will reflect changes made to the local files. Access the web interface at `http://localhost:3000`.
 
-To connect a local instance of ROS you must first install Rosbridge onto your ROS instance;
-
-```
-sudo apt-get install ros-<rosdistro>-rosbridge-suite
-```
-
-After installation you must setup your environment for ROS and rosbridge;
-
-```
-source /opt/ros/<rosdistro>/setup.bash
-```
-
-Finally all that is needed is to launch rosbridge;
-
-```
-roslaunch rosbridge_server rosbridge_websocket.launch
-```
-
-> Note: `<rosdistro>` is the ROS installation distribution that you are currently using, for example `noetic`
+## Production
+For production use, run `docker-compose -f docker-compose.prod.yaml up -f`. The app is still available at `http://localhost:3000` but local changes will not be reflected.

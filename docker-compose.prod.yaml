@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  cprt_web:
+    container_name: cprt_web
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - 3000:80

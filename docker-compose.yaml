@@ -1,0 +1,11 @@
+version: '2'
+services:
+  cprt_web:
+    container_name: cprt_web
+    build:
+      context: .
+    ports:
+      - 3000:3000
+    volumes:
+      - /app/node_modules
+      - .:/app
