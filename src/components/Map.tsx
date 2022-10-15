@@ -1,10 +1,11 @@
 import React, { ReactElement, useState } from 'react';
-import MapGL, { Source, Layer, LayerProps, MapEvent } from 'react-map-gl';
+import Map, { Source, Layer, LayerProps, MapEvent } from 'react-map-gl';
 import * as GeoJSON from 'geojson';
 import Markers, { MarkerState } from './MapMarkers';
 import { CallbackEvent } from 'react-map-gl/src/components/draggable-control';
 import update from 'immutability-helper';
 import MapContextMenu, { ContextMenuState } from './MapContextMenu';
+import maplibregl from 'maplibre-gl';
 import MarkerMenu from './MarkerMenu';
 import RoverLocation from './RoverLocation';
 
@@ -14,13 +15,13 @@ const EMPTY_STYLE = {
   layers: []
 };
 
-export default function Map(): ReactElement {
+export default function MapView(): ReactElement {
   const [viewport, setViewPort] = useState({
     longitude: -75.69851369243126,
     latitude: 45.38487773746181,
-    zoom: 12,
+    zoom: 15,
     minZoom: 12,
-    maxZoom: 19
+    maxZoom: 18.5
   });
 
   const [markers, setMarkers] = useState<MarkerState[]>([]);
@@ -120,12 +121,13 @@ export default function Map(): ReactElement {
 
   return (
     <React.Fragment>
-      <MapGL
+      <Map
         {...viewport}
         mapStyle={EMPTY_STYLE}
         width="100%"
         height="100%"
         onViewportChange={setViewPort}
+        mapLib={maplibregl}
         onContextMenu={handleContextMenu}
         dragRotate={false}
         touchRotate={false}
@@ -139,7 +141,7 @@ export default function Map(): ReactElement {
             }:3001/tiles/{z}/{x}/{y}.png`
           ]}
         >
-          <Layer type="raster" minzoom={12} maxzoom={18} paint={{}} />
+          <Layer type="raster" minzoom={12} maxzoom={19} paint={{}} />
         </Source>
         <Source id="my-data" type="geojson" data={geojson}>
           <Layer {...layerStyle} />
@@ -150,7 +152,7 @@ export default function Map(): ReactElement {
           onClick={handleClickMarkerMenu}
         />
         <RoverLocation />
-      </MapGL>
+      </Map>
       <MapContextMenu
         createMarker={createMarker}
         contextMenu={contextMenu}

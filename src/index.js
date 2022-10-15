@@ -1,15 +1,15 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import Connect from "./components/Connect";
-import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import ROSProvider from "./components/ROSProvider";
-import RequireROS from "./components/RequireROS";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Layout from "./components/Layout";
-import Dashboard from "./components/Dashboard";
-import ControlTab from "./components/ControlTab";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Connect from './components/Connect';
+import * as serviceWorker from './serviceWorker';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ROSProvider from './components/ROSProvider';
+import RequireROS from './components/RequireROS';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Layout from './components/Layout';
+import Dashboard from './components/Dashboard';
+import ControlTab from './components/ControlTab';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -33,7 +33,7 @@ ReactDOM.render(
       </ROSProvider>
     </BrowserRouter>
   </React.StrictMode>,
-  document.getElementById("root")
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
