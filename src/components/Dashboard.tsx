@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import StreamViewer from "./StreamViewer";
-import ROSContext from "../contexts/ROSContext";
-import Map from "./Map";
-import { Container, Grid, Paper } from "@mui/material";
+import React, { useContext } from 'react';
+import StreamViewer from './StreamViewer';
+import ROSContext from '../contexts/ROSContext';
+import Map from './Map';
+import { Container, Grid, Paper } from '@mui/material';
 
 function Dashboard(): React.ReactElement {
   const ros = useContext(ROSContext);
@@ -30,9 +30,9 @@ function Dashboard(): React.ReactElement {
           <Paper
             sx={{
               p: 2,
-              display: "flex",
-              flexDirection: "column",
-              height: 600,
+              display: 'flex',
+              flexDirection: 'column',
+              height: 600
             }}
           >
             <Map />

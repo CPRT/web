@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
-import { TextField, Grid, Paper, Box } from "@mui/material";
-import ROSContext from "../contexts/ROSContext";
-import ConnectButton from "./ConnectButton";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useContext } from 'react';
+import { TextField, Grid, Paper, Box } from '@mui/material';
+import ROSContext from '../contexts/ROSContext';
+import ConnectButton from './ConnectButton';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 function Connect(): React.ReactElement {
   // Context
@@ -12,15 +12,15 @@ function Connect(): React.ReactElement {
 
   // State
   const [address, setAddress] = React.useState<string>(
-    window.location.host.split(":")[0] //Set the address serving the page as the default ROS server address
+    window.location.host.split(':')[0] //Set the address serving the page as the default ROS server address
   );
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || '/';
 
   // Methods
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     if (address) {
-      localStorage.setItem("rosServerAddress", address);
+      localStorage.setItem('rosServerAddress', address);
       ros.connect(address, () => {
         navigate(from, { replace: true });
       });
@@ -37,7 +37,7 @@ function Connect(): React.ReactElement {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ minHeight: "100vh" }}
+      style={{ minHeight: '100vh' }}
     >
       <Grid item lg={4} md={6} sm={8}>
         <Paper>

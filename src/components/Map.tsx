@@ -1,17 +1,17 @@
-import React, { ReactElement, useState } from "react";
-import MapGL, { Source, Layer, LayerProps, MapEvent } from "react-map-gl";
-import * as GeoJSON from "geojson";
-import Markers, { MarkerState } from "./MapMarkers";
-import { CallbackEvent } from "react-map-gl/src/components/draggable-control";
-import update from "immutability-helper";
-import MapContextMenu, { ContextMenuState } from "./MapContextMenu";
-import MarkerMenu from "./MarkerMenu";
-import RoverLocation from "./RoverLocation";
+import React, { ReactElement, useState } from 'react';
+import MapGL, { Source, Layer, LayerProps, MapEvent } from 'react-map-gl';
+import * as GeoJSON from 'geojson';
+import Markers, { MarkerState } from './MapMarkers';
+import { CallbackEvent } from 'react-map-gl/src/components/draggable-control';
+import update from 'immutability-helper';
+import MapContextMenu, { ContextMenuState } from './MapContextMenu';
+import MarkerMenu from './MarkerMenu';
+import RoverLocation from './RoverLocation';
 
 const EMPTY_STYLE = {
   version: 8,
   sources: {},
-  layers: [],
+  layers: []
 };
 
 export default function Map(): ReactElement {
@@ -20,7 +20,7 @@ export default function Map(): ReactElement {
     latitude: 45.38487773746181,
     zoom: 12,
     minZoom: 12,
-    maxZoom: 19,
+    maxZoom: 19
   });
 
   const [markers, setMarkers] = useState<MarkerState[]>([]);
@@ -36,11 +36,11 @@ export default function Map(): ReactElement {
     setContextMenu(
       contextMenu === null
         ? {
-          mouseX: (event.srcEvent as MouseEvent).clientX - 2,
-          mouseY: (event.srcEvent as MouseEvent).clientY - 4,
-          mouseLng: event.lngLat[0],
-          mouseLat: event.lngLat[1],
-        }
+            mouseX: (event.srcEvent as MouseEvent).clientX - 2,
+            mouseY: (event.srcEvent as MouseEvent).clientY - 4,
+            mouseLng: event.lngLat[0],
+            mouseLat: event.lngLat[1]
+          }
         : null
     );
   };
@@ -69,30 +69,30 @@ export default function Map(): ReactElement {
     if (contextMenu?.mouseLng && contextMenu.mouseLat) {
       setMarkers((prevState) => [
         ...prevState,
-        { long: contextMenu.mouseLng, lat: contextMenu.mouseLat },
+        { long: contextMenu.mouseLng, lat: contextMenu.mouseLat }
       ]);
     }
     handleClose();
   };
 
   const geojson: GeoJSON.FeatureCollection = {
-    type: "FeatureCollection",
+    type: 'FeatureCollection',
     features: [
       {
-        type: "Feature",
-        geometry: { type: "Point", coordinates: [-110.791935, 38.406441] },
-        properties: null,
-      },
-    ],
+        type: 'Feature',
+        geometry: { type: 'Point', coordinates: [-110.791935, 38.406441] },
+        properties: null
+      }
+    ]
   };
 
   const layerStyle: LayerProps = {
-    id: "point",
-    type: "circle",
+    id: 'point',
+    type: 'circle',
     paint: {
-      "circle-radius": 5,
-      "circle-color": "#007cbf",
-    },
+      'circle-radius': 5,
+      'circle-color': '#007cbf'
+    }
   };
 
   const updateMarker = (lat: number, lng: number, index?: number) => {
@@ -100,8 +100,8 @@ export default function Map(): ReactElement {
       update(markers, {
         [index == undefined ? activeMarker : index]: {
           lat: { $set: lat },
-          long: { $set: lng },
-        },
+          long: { $set: lng }
+        }
       })
     );
   };
@@ -133,7 +133,11 @@ export default function Map(): ReactElement {
         <Source
           type="raster"
           tileSize={256}
-          tiles={[`http://${window.location.host.split(":")[0]}:3001/tiles/{z}/{x}/{y}.png`]}
+          tiles={[
+            `http://${
+              window.location.host.split(':')[0]
+            }:3001/tiles/{z}/{x}/{y}.png`
+          ]}
         >
           <Layer type="raster" minzoom={12} maxzoom={18} paint={{}} />
         </Source>

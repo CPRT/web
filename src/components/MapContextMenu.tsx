@@ -1,5 +1,5 @@
-import React, { ReactElement } from "react";
-import { Menu, MenuItem } from "@mui/material";
+import React, { ReactElement } from 'react';
+import { Menu, MenuItem } from '@mui/material';
 
 export interface ContextMenuState {
   mouseX: number;

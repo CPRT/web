@@ -1,9 +1,9 @@
-import React from "react";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import { styled } from "@mui/material/styles";
-import { Toolbar, IconButton, Typography } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import SettingsMenu from "./SettingsMenu";
+import React from 'react';
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import { styled } from '@mui/material/styles';
+import { Toolbar, IconButton, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import SettingsMenu from './SettingsMenu';
 
 const drawerWidth = 240;
 
@@ -12,21 +12,21 @@ interface AppBarProps extends MuiAppBarProps {
 }
 
 const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== 'open'
 })<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(["width", "margin"], {
+  transition: theme.transitions.create(['width', 'margin'], {
     easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
+    duration: theme.transitions.duration.leavingScreen
   }),
   ...(open && {
     marginLeft: drawerWidth,
     width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(["width", "margin"], {
+    transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
+      duration: theme.transitions.duration.enteringScreen
+    })
+  })
 }));
 
 interface HeaderProps {
@@ -39,7 +39,7 @@ export default function Header(props: HeaderProps): React.ReactElement {
     <AppBar position="absolute" open={props.open}>
       <Toolbar
         sx={{
-          pr: "24px", // keep right padding when drawer closed
+          pr: '24px' // keep right padding when drawer closed
         }}
       >
         <IconButton
@@ -48,8 +48,8 @@ export default function Header(props: HeaderProps): React.ReactElement {
           aria-label="menu"
           onClick={props.toggleOpen}
           sx={{
-            marginRight: "36px",
-            ...(props.open && { display: "none" }),
+            marginRight: '36px',
+            ...(props.open && { display: 'none' })
           }}
         >
           <MenuIcon />

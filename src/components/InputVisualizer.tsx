@@ -1,8 +1,8 @@
-import React from "react";
-import VirtualJoystick from "./VirtualJoystick";
+import React from 'react';
+import VirtualJoystick from './VirtualJoystick';
 
 function isTouchDevice() {
-  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 }
 
 interface InputVisualizerProps {
@@ -19,7 +19,7 @@ function InputVisualizer(props: InputVisualizerProps): React.ReactElement {
     contentWidth,
     controllerConnected,
     setLeftY,
-    setRightY,
+    setRightY
   } = props;
   if (controllerConnected) {
     return <div>Gamepad</div>;

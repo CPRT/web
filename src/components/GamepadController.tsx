@@ -1,5 +1,5 @@
-import Gamepad from "react-gamepad";
-import React from "react";
+import Gamepad from 'react-gamepad';
+import React from 'react';
 
 interface GamepadProps {
   leftY: number;
@@ -28,9 +28,9 @@ function GamepadController(props: GamepadProps): React.ReactElement {
   };
 
   const axisChangeHandler = (axisName: string, value: number) => {
-    if (axisName === "LeftStickY") {
+    if (axisName === 'LeftStickY') {
       setLeftY(value);
-    } else if (axisName === "RightStickY") {
+    } else if (axisName === 'RightStickY') {
       setRightY(value);
     }
   };

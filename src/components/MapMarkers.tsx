@@ -1,7 +1,7 @@
-import React, { ReactElement } from "react";
-import { Room } from "@mui/icons-material";
-import { MapEvent, Marker } from "react-map-gl";
-import { CallbackEvent } from "react-map-gl/src/components/draggable-control";
+import React, { ReactElement } from 'react';
+import { Room } from '@mui/icons-material';
+import { MapEvent, Marker } from 'react-map-gl';
+import { CallbackEvent } from 'react-map-gl/src/components/draggable-control';
 
 export interface MarkerState {
   lat: number;

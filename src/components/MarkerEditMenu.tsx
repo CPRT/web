@@ -1,6 +1,6 @@
-import React from "react";
-import { Popover, Grid, IconButton, TextField } from "@mui/material";
-import CheckIcon from "@mui/icons-material/Check";
+import React from 'react';
+import { Popover, Grid, IconButton, TextField } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
 
 interface MarkerEditMenuProps {
   editMenuAnchorEl: HTMLElement | null;
@@ -22,7 +22,7 @@ export default function MarkerEditMenu(
     updateMarker,
     setLatInput,
     setLngInput,
-    handleCloseMarkerEditMenu,
+    handleCloseMarkerEditMenu
   } = props;
 
   const handleSubmit = (event: React.SyntheticEvent) => {
@@ -41,11 +41,11 @@ export default function MarkerEditMenu(
       open={open}
       onClose={handleCloseMarkerEditMenu}
       anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "left",
+        vertical: 'bottom',
+        horizontal: 'left'
       }}
       PaperProps={{
-        style: { width: 250 },
+        style: { width: 250 }
       }}
     >
       <form onSubmit={handleSubmit}>

@@ -1,11 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Marker } from "react-map-gl";
-import ROSLIB from "roslib";
-import ROSContext from "../contexts/ROSContext";
-import { Room } from "@mui/icons-material";
-import type { ROSLIB as ROS } from "../types/roslib";
+import React, { useContext, useEffect, useState } from 'react';
+import { Marker } from 'react-map-gl';
+import ROSLIB from 'roslib';
+import ROSContext from '../contexts/ROSContext';
+import { Room } from '@mui/icons-material';
+import type { ROSLIB as ROS } from '../types/roslib';
 
-const GPSTOPIC = "/sensors/gps";
+const GPSTOPIC = '/sensors/gps';
 
 interface Coordinate {
   lat: number;
@@ -24,7 +24,7 @@ export default function RoverLocation(): React.ReactElement {
     }
     setRoverPosition({
       lat: (message as ROS.NavSatFix).latitude,
-      lng: (message as ROS.NavSatFix).longitude,
+      lng: (message as ROS.NavSatFix).longitude
     });
     //If another message isn't received within 10s, reset the position
     setTimeoutId(setTimeout(() => setRoverPosition(null), 10000));
@@ -33,7 +33,7 @@ export default function RoverLocation(): React.ReactElement {
   const roverGps = new ROSLIB.Topic({
     ros: ros.ros,
     name: GPSTOPIC,
-    messageType: "sensor_msgs/NavSatFix",
+    messageType: 'sensor_msgs/NavSatFix'
   });
 
   useEffect(() => {
@@ -50,7 +50,7 @@ export default function RoverLocation(): React.ReactElement {
         offsetLeft={-12}
         offsetTop={-24}
       >
-        <Room style={{ fill: "red" }} />
+        <Room style={{ fill: 'red' }} />
       </Marker>
     );
   }

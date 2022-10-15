@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, CircularProgress } from "@mui/material";
+import React from 'react';
+import { Button, CircularProgress } from '@mui/material';
 
 interface ConnectButtonProps {
   connecting: boolean;

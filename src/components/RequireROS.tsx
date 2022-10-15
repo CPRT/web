@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
-import ROSContext from "../contexts/ROSContext";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
-import { Navigate } from "react-router-dom";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect } from 'react';
+import ROSContext from '../contexts/ROSContext';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Navigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface RequireROSProps {
   children?: React.ReactNode;
@@ -14,7 +14,7 @@ function RequireROS(props: RequireROSProps): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const savedAddress = localStorage.getItem("rosServerAddress");
+  const savedAddress = localStorage.getItem('rosServerAddress');
 
   useEffect(() => {
     if (
@@ -31,7 +31,7 @@ function RequireROS(props: RequireROSProps): React.ReactElement {
   if (ros.connection.isConnecting) {
     return (
       <Backdrop
-        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open
       >
         <CircularProgress color="inherit" />

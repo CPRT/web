@@ -1,6 +1,6 @@
-import React from "react";
-import { Joystick } from "react-joystick-component";
-import Grid2 from "@mui/material/Unstable_Grid2"; // Grid version 2
+import React from 'react';
+import { Joystick } from 'react-joystick-component';
+import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 interface VirtualJoystickProps {
   contentHeight: number;

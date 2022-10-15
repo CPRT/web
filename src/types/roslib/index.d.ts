@@ -1,4 +1,4 @@
-declare module "roslib";
+declare module 'roslib';
 
 export declare namespace ROSLIB {
   interface Header {

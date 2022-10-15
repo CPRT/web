@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from "react";
-import { useState } from "react";
-import ROSLIB from "roslib";
-import ROSContext from "../contexts/ROSContext";
-import GamepadController from "./GamepadController";
-import InputVisualizer from "./InputVisualizer";
+import React, { useContext, useEffect } from 'react';
+import { useState } from 'react';
+import ROSLIB from 'roslib';
+import ROSContext from '../contexts/ROSContext';
+import GamepadController from './GamepadController';
+import InputVisualizer from './InputVisualizer';
 
 interface InputHandlerProps {
   contentHeight: number;
@@ -22,8 +22,8 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
 
   const cmdVel = new ROSLIB.Topic({
     ros: ros.ros,
-    name: "/cmd_vel",
-    messageType: "geometry_msgs/Twist",
+    name: '/cmd_vel',
+    messageType: 'geometry_msgs/Twist'
   });
 
   // Methods
@@ -34,16 +34,16 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
       linear: {
         x: Math.round((linear_vel + Number.EPSILON) * 100) / 100,
         y: 0,
-        z: 0,
+        z: 0
       },
       angular: {
         x: 0,
         y: 0,
-        z: Math.round((angular_vel + Number.EPSILON) * 100) / 100,
-      },
+        z: Math.round((angular_vel + Number.EPSILON) * 100) / 100
+      }
     });
     cmdVel.publish(message);
-    console.log("Published /cmd_vel.");
+    console.log('Published /cmd_vel.');
   };
 
   useEffect(() => {

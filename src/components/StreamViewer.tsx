@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useCallback } from "react";
-import MJPEGCANVAS from "mjpegcanvas";
-import uniqueId from "lodash/uniqueId";
+import React, { useEffect, useState, useCallback } from 'react';
+import MJPEGCANVAS from 'mjpegcanvas';
+import uniqueId from 'lodash/uniqueId';
 
 interface StreamProps {
   host: string;
@@ -10,7 +10,7 @@ interface StreamProps {
 }
 
 export default function MjpegStream(props: StreamProps): React.ReactElement {
-  const [id] = useState<string>(uniqueId("mjpeg-"));
+  const [id] = useState<string>(uniqueId('mjpeg-'));
   // const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
   const div = useCallback((node) => {
@@ -31,10 +31,10 @@ export default function MjpegStream(props: StreamProps): React.ReactElement {
       width: width,
       topic: props.topic,
       interval: 30,
-      quality: props.quality,
+      quality: props.quality
     });
   });
 
   // return <div id={id} ref="child" />;
-  return <div id={id} ref={div} style={{ height: "100%" }} />;
+  return <div id={id} ref={div} style={{ height: '100%' }} />;
 }

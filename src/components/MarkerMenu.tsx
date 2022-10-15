@@ -1,9 +1,9 @@
-import React from "react";
-import { Popover, Grid, IconButton } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-import MarkerEditMenu from "./MarkerEditMenu";
-import { MarkerState } from "./MapMarkers";
+import React from 'react';
+import { Popover, Grid, IconButton } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import MarkerEditMenu from './MarkerEditMenu';
+import { MarkerState } from './MapMarkers';
 
 interface MarkerMenuProps {
   markerMenuAnchorEl: HTMLElement | null;
@@ -19,7 +19,7 @@ export default function MarkerMenu(props: MarkerMenuProps): React.ReactElement {
     getMarker,
     updateMarker,
     removeMarker,
-    handleCloseMarkerMenu,
+    handleCloseMarkerMenu
   } = props;
   const open = Boolean(markerMenuAnchorEl);
 
@@ -51,8 +51,8 @@ export default function MarkerMenu(props: MarkerMenuProps): React.ReactElement {
         open={open}
         onClose={handleCloseMarkerMenu}
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left'
         }}
       >
         <Grid container>
