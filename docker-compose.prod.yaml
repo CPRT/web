@@ -5,5 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.prod
+    volumes:
+      - ./tiles:/tiles
     ports:
       - 3000:80

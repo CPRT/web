@@ -16,11 +16,11 @@ const EMPTY_STYLE = {
 
 export default function Map(): ReactElement {
   const [viewport, setViewPort] = useState({
-    longitude: -110.791926,
-    latitude: 38.406439,
+    longitude: -75.69851369243126,
+    latitude: 45.38487773746181,
     zoom: 12,
     minZoom: 12,
-    maxZoom: 17,
+    maxZoom: 19,
   });
 
   const [markers, setMarkers] = useState<MarkerState[]>([]);
@@ -36,11 +36,11 @@ export default function Map(): ReactElement {
     setContextMenu(
       contextMenu === null
         ? {
-            mouseX: (event.srcEvent as MouseEvent).clientX - 2,
-            mouseY: (event.srcEvent as MouseEvent).clientY - 4,
-            mouseLng: event.lngLat[0],
-            mouseLat: event.lngLat[1],
-          }
+          mouseX: (event.srcEvent as MouseEvent).clientX - 2,
+          mouseY: (event.srcEvent as MouseEvent).clientY - 4,
+          mouseLng: event.lngLat[0],
+          mouseLat: event.lngLat[1],
+        }
         : null
     );
   };
@@ -133,7 +133,7 @@ export default function Map(): ReactElement {
         <Source
           type="raster"
           tileSize={256}
-          tiles={["http://192.168.2.51/{z}/{x}/{y}.png"]}
+          tiles={[`http://${window.location.host.split(":")[0]}:3001/tiles/{z}/{x}/{y}.png`]}
         >
           <Layer type="raster" minzoom={12} maxzoom={18} paint={{}} />
         </Source>
