@@ -43,12 +43,21 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
       }
     });
     cmdVel.publish(message);
-    console.log('Published /cmd_vel.');
+    console.log(
+      'Published: ' + message.linear.x + 'm/s ' + message.angular.z + 'rad/s'
+    );
   };
 
   useEffect(() => {
     sendCmdVelMsg(); // publish to /cmd_vel when state is updated
   });
+
+  useEffect(() => {
+    const cmd_vel_keepalive = setInterval(sendCmdVelMsg, 500);
+    return () => {
+      clearInterval(cmd_vel_keepalive);
+    };
+  }, [leftY, rightY]);
 
   return (
     <React.Fragment>
