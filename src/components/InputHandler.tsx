@@ -16,6 +16,7 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
   const [rightY, setRightY] = useState<number>(0.0);
   const [controllerConnected, setControllerConnected] =
     useState<boolean>(false);
+  const [maxSpeed, setMaxSpeed] = useState<number>();
 
   const ros = useContext(ROSContext);
   const { contentHeight, contentWidth } = props;
@@ -26,10 +27,17 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
     messageType: 'geometry_msgs/Twist'
   });
 
+  const maxSpeedParam = new ROSLIB.Param({
+    ros: ros.ros,
+    name: '/driver:max_speed'
+  });
+
   // Methods
   const sendCmdVelMsg = () => {
-    const linear_vel = (leftY + rightY) / 2.0; // (m/s) TODO: Multiply by maximum speed of rover in m/s
-    const angular_vel = (rightY - leftY) / 2.0; // (rad/s)
+    const linear_vel =
+      ((leftY + rightY) / 2.0) * (maxSpeed != undefined ? maxSpeed : 1.0); // m/s
+    const angular_vel =
+      ((rightY - leftY) / 2.0) * (maxSpeed != undefined ? maxSpeed : 1.0); // rad/s
     const message = new ROSLIB.Message({
       linear: {
         x: Math.round((linear_vel + Number.EPSILON) * 100) / 100,
@@ -51,6 +59,13 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
   useEffect(() => {
     sendCmdVelMsg(); // publish to /cmd_vel when state is updated
   });
+
+  useEffect(() => {
+    maxSpeedParam.get((value) => {
+      console.log('Max Speed', value);
+      setMaxSpeed(value);
+    });
+  }, []);
 
   useEffect(() => {
     const cmd_vel_keepalive = setInterval(sendCmdVelMsg, 500);

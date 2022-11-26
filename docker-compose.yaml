@@ -10,7 +10,12 @@ services:
       - .:/app
     environment:
       - CHOKIDAR_USEPOLLING=true
-    command: ["/bin/bash", "-c", "npm install --silent && react-scripts@3.4.1 -g --silent && npm start"]
+    command:
+      [
+        '/bin/bash',
+        '-c',
+        'npm install --silent && npm install react-scripts@3.4.1 -g --silent && npm start'
+      ]
   maptile_server:
     image: nginx
     ports:
