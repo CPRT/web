@@ -65,6 +65,10 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
       console.log('Max Speed', value);
       setMaxSpeed(value);
     });
+    window.addEventListener('blur', () => {
+      setLeftY(0);
+      setRightY(0);
+    });
   }, []);
 
   useEffect(() => {
