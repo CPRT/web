@@ -4,6 +4,7 @@ import ROSLIB from 'roslib';
 import ROSContext from '../contexts/ROSContext';
 import GamepadController from './GamepadController';
 import InputVisualizer from './InputVisualizer';
+import type { Twist } from '../types/ros';
 
 interface InputHandlerProps {
   contentHeight: number;
@@ -24,7 +25,8 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
   const cmdVel = new ROSLIB.Topic({
     ros: ros.ros,
     name: '/cmd_vel',
-    messageType: 'geometry_msgs/Twist'
+    messageType: 'geometry_msgs/Twist',
+    throttle_rate: 100
   });
 
   const maxSpeedParam = new ROSLIB.Param({
@@ -49,7 +51,7 @@ function InputHandler(props: InputHandlerProps): React.ReactElement {
         y: 0,
         z: Math.round((angular_vel + Number.EPSILON) * 100) / 100
       }
-    });
+    }) as Twist;
     cmdVel.publish(message);
     console.log(
       'Published: ' + message.linear.x + 'm/s ' + message.angular.z + 'rad/s'

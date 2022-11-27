@@ -4,6 +4,7 @@ import { useOutletContext } from 'react-router-dom';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { drawerWidth } from './Sidebar';
 import InputHandler from './InputHandler';
+import NavigationIndicators from './NavigationIndicators';
 
 const theme = createTheme();
 
@@ -20,6 +21,7 @@ function ControlTab(): React.ReactElement {
   return (
     <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
       <InputHandler contentWidth={contentWidth} contentHeight={contentHeight} />
+      <NavigationIndicators />
     </Container>
   );
 }

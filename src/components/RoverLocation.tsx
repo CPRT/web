@@ -3,7 +3,7 @@ import { Marker } from 'react-map-gl';
 import ROSLIB from 'roslib';
 import ROSContext from '../contexts/ROSContext';
 import { Room } from '@mui/icons-material';
-import type { ROSLIB as ROS } from '../types/roslib';
+import type { NavSatFix } from '../types/ros';
 
 const GPSTOPIC = '/sensors/gps';
 
@@ -18,13 +18,14 @@ export default function RoverLocation(): React.ReactElement {
   const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
 
   const gpsCallback = (message: ROSLIB.Message) => {
+    const navSatFixMessage = message as NavSatFix;
     if (timeoutId) {
       clearTimeout(timeoutId);
       setTimeoutId(null);
     }
     setRoverPosition({
-      lat: (message as ROS.NavSatFix).latitude,
-      lng: (message as ROS.NavSatFix).longitude
+      lat: navSatFixMessage.latitude,
+      lng: navSatFixMessage.longitude
     });
     //If another message isn't received within 10s, reset the position
     setTimeoutId(setTimeout(() => setRoverPosition(null), 10000));
