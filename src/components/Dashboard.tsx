@@ -6,6 +6,7 @@ import { Container, Grid, Paper } from '@mui/material';
 
 function Dashboard(): React.ReactElement {
   const ros = useContext(ROSContext);
+  console.log(ros.connection);
 
   return (
     <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
@@ -24,6 +25,7 @@ function Dashboard(): React.ReactElement {
             port={8080}
             topic="/rear_camera/image_raw"
             quality={80}
+            invert={true}
           />
         </Grid>
         <Grid item xs={6}>

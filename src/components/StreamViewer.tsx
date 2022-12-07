@@ -7,6 +7,7 @@ interface StreamProps {
   port: number;
   topic: string;
   quality: number;
+  invert?: boolean;
 }
 
 export default function MjpegStream(props: StreamProps): React.ReactElement {
@@ -31,9 +32,10 @@ export default function MjpegStream(props: StreamProps): React.ReactElement {
       width: width,
       topic: props.topic,
       interval: 30,
-      quality: props.quality
+      quality: props.quality,
+      invert: props.invert != undefined ? props.invert : false
     });
-  });
+  }, [props.host]);
 
   // return <div id={id} ref="child" />;
   return <div id={id} ref={div} style={{ height: '100%' }} />;

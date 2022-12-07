@@ -80,10 +80,10 @@ export default function ROSProvider(props: ROSProps): React.ReactElement {
         });
       }
     });
-  }, []);
+  }, [connection]);
 
   const connect = (url: string, callback: VoidFunction) => {
-    console.log('Attemping Connection');
+    console.log('Attemping Connection to ' + url);
     setConnection({
       ...connection,
       url: url,
