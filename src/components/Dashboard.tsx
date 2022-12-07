@@ -14,18 +14,18 @@ function Dashboard(): React.ReactElement {
           <StreamViewer
             host={ros.connection.url}
             port={8080}
-            topic="/webcam/image_raw"
+            topic="/forward_camera/image_raw"
             quality={80}
           />
         </Grid>
-        {/* <Grid item xs={3}>
-            <StreamViewer
-              host={ros.connection.url}
-              port={8080}
-              topic="/zed2/depth/depth_registered"
-              quality={80}
-            />
-          </Grid> */}
+        <Grid item xs={3}>
+          <StreamViewer
+            host={ros.connection.url}
+            port={8080}
+            topic="/rear_camera/image_raw"
+            quality={80}
+          />
+        </Grid>
         <Grid item xs={6}>
           <Paper
             sx={{
