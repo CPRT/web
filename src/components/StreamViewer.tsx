@@ -27,7 +27,7 @@ export default function MjpegStream(props: StreamProps): React.ReactElement {
       host: props.host,
       port: props.port,
       // width: "100%",
-      height: 320,
+      height: (width * 9) / 16,
       // height: height,
       width: width,
       topic: props.topic,
